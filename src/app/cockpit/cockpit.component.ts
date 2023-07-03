@@ -1,4 +1,4 @@
-import { Component, OnInit, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, Output, EventEmitter, ViewChild, ElementRef } from '@angular/core';
 
 
 @Component({
@@ -7,10 +7,11 @@ import { Component, OnInit, Output, EventEmitter } from '@angular/core';
   styleUrls: ['./cockpit.component.css']
 })
 export class CockpitComponent implements OnInit {
-  newServerName = '';
-  newServerContent = '';
   serverElements = []
+  @ViewChild('newServerName') newServerName:ElementRef
+  @ViewChild('newServerContent')   newServerContent : ElementRef
   @Output() newItemEvent = new EventEmitter<{type:string, name :string, content :string}>();
+  
 
   constructor() { }
 
@@ -20,8 +21,8 @@ export class CockpitComponent implements OnInit {
   onAddServer() {
     this.serverElements.push({
       type: 'server',
-      name: this.newServerName,
-      content: this.newServerContent
+      name: this.newServerName.nativeElement.value,
+      content: this.newServerContent.nativeElement.value
     });
     this.newItemEvent.emit(this.serverElements.pop())
   }
@@ -40,9 +41,8 @@ export class CockpitComponent implements OnInit {
   //you can implement the event emmiter directly like below. It will work in both the cases
   onAddBlueprint(event){
     this.newItemEvent.emit({ type: 'blueprint',
-      name: this.newServerName,
-      content: this.newServerContent})
-      console.log(event)
+      name: this.newServerName.nativeElement.value,
+      content: this.newServerContent.nativeElement.value})
   }
   
 }
